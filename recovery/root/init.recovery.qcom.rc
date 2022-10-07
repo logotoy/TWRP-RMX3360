@@ -40,31 +40,23 @@ on post-fs
     start boot-hal-1-1
 
 on init
+    mkdir /usb_otg
     write /sys/class/backlight/panel0-backlight/brightness 200
-    insmod /vendor/lib/modules/msm_drm.ko
-    insmod /vendor/lib/modules/adsp_loader_dlkm.ko
+#    insmod /vendor/lib/modules/msm_drm.ko
+#    insmod /vendor/lib/modules/adsp_loader_dlkm.ko
     
 on boot
+    setprop sys.usb.cofig adb
     start health-hal-2-1
     start custom-script
     
-on boot && property:ro.boot.prjname=*
-    start load_oplus_props   
-    
-
 on property:twrp.modules.loaded=true
     # Load ADSP firmware for PMIC
     wait /sys/kernel/boot_adsp/boot
     write /sys/kernel/boot_adsp/boot 1
     wait /sys/class/power_supply/battery
-    umount /firmware
-
-service load_oplus_props /system/bin/load_oplus_props.sh
-    user root
-    group root
-    disabled
-    oneshot
-    seclabel u:r:recovery:s0    
+#    umount /firmware   
+    setprop sys.usb.cofig mtp,adb    
     
 service custom-script /system/bin/custom-script.sh
     user root
