@@ -167,6 +167,8 @@ TW_INCLUDE_FASTBOOTD := true
 TW_NO_LEGACY_PROPS := true
 #TW_SUPPORT_INPUT_AIDL_HAPTICS := true
 TW_EXLUCDE_APEX := true
+TW_USE_TOOLBOX := true
+TW_SKIP_COMPATIBILITY_CHECK := true
 
 RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
@@ -174,7 +176,7 @@ RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@1.0.so \
     $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@2.0.so
     
-TW_LOAD_VENDOR_MODULES := "msm_drm.ko adsp_loader_dlkm.ko oplus_chg.ko qcom-hv-haptics.ko swr_haptics_dlkm.ko"
+TW_LOAD_VENDOR_MODULES := "adsp_loader_dlkm.ko"
 
 # TWRP Debug Flags
 #TWRP_EVENT_LOGGING := true
@@ -202,19 +204,49 @@ endif
 
 # Custom TWRP Versioning
 # See https://github.com/minimal-manifest-twrp/android_device_common_version-info for details
-ifneq ($(wildcard device/common/version-info/.),)
-    # device version is optional - the default value is "0" if nothing is set in device tree
-    CUSTOM_TWRP_DEVICE_VERSION := 0
-    # version prefix is optional - the default value is "LOCAL" if nothing is set in device tree
-    CUSTOM_TWRP_VERSION_PREFIX := RUI3
-
-    include device/common/version-info/custom_twrp_version.mk
-
-    ifeq ($(CUSTOM_TWRP_VERSION),)
-        CUSTOM_TWRP_VERSION := $(shell date +%Y%m%d)-01
-    endif
-endif
+#ifneq ($(wildcard device/common/version-info/.),)
+#    # device version is optional - the default value is "0" if nothing is set in device tree
+#    CUSTOM_TWRP_DEVICE_VERSION := 0
+#    # version prefix is optional - the default value is "LOCAL" if nothing is set in device tree
+#   CUSTOM_TWRP_VERSION_PREFIX := RUI3
+#
+#    include device/common/version-info/custom_twrp_version.mk
+#
+#    ifeq ($(CUSTOM_TWRP_VERSION),)
+#        CUSTOM_TWRP_VERSION := $(shell date +%Y%m%d)-01
+#    endif
+#endif
 
 #
 # end local build flags
+#
+
+#
+# SHRP flags
+#
+SHRP_DEVICE_CODE := RMX3360
+SHRP_MAINTAINER := logotoy
+SHRP_DEVICE_TYPE := A/B
+SHRP_REC_TYPE := SAR
+#SHRP_REC := /dev/block/bootdevice/by-name/recovery
+SHRP_EDL_MODE := 1
+SHRP_INTERNAL := /sdcard
+#SHRP_EXTERNAL := /external_sd
+SHRP_OTG := /usb_otg
+SHRP_FLASH := 1
+SHRP_FLASH_MAX_BRIGHTNESS := 200
+SHRP_DARK := true
+#SHRP_OZIP_DECRYPT := true
+SHRP_AB := true
+SHRP_EXPRESS := true
+SHRP_DEV_USE_HEX := true
+
+SHRP_EXCLUDE_DEFAULT_ADDONS := true
+SHRP_SKIP_DEFAULT_ADDON_1 := true
+SHRP_SKIP_DEFAULT_ADDON_2 := true
+SHRP_SKIP_DEFAULT_ADDON_3 := true
+SHRP_SKIP_DEFAULT_ADDON_4 := true
+INC_IN_REC_MAGISK := true
+#
+# end SHRP flags
 #

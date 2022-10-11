@@ -33,30 +33,37 @@ on fs
 
     # Mount firmware
     mkdir /firmware
-    mount vfat /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro
-
+    mount vfat /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro    
+    
 on post-fs
     
     start boot-hal-1-1
-
+    
+on early-init
+    
+    exec u:r:recovery:s0 -- /system/bin/modprobe.sh    
+    
+    exec u:r:recovery:s0 -- /system/bin/modprobe -a -d /vendor/lib/modules q6_pdr_dlkm q6_notifier_dlkm snd_event_dlkm apr_dlkm adsp_loader_dlkm q6_dlkm native_dlkm pinctrl_wcd_dlkm pinctrl_lpi_dlkm swr_dlkm platform_dlkm hdmi_dlkm stub_dlkm wcd_core_dlkm wsa883x_dlkm bolero_cdc_dlkm wsa_macro_dlkm va_macro_dlkm rx_macro_dlkm tx_macro_dlkm bt_fm_slim wcd937x_dlkm wcd937x_slave_dlkm swr_dmic_dlkm swr_haptics_dlkm machine_dlkm radio-i2c-rtc6226-qca mmc_core mmc_block sdhci sdhci-pltfm sdhci-msm cdsprm audio_sia81xx   
+    
 on init
     mkdir /usb_otg
-    write /sys/class/backlight/panel0-backlight/brightness 200
-#    insmod /vendor/lib/modules/msm_drm.ko
-#    insmod /vendor/lib/modules/adsp_loader_dlkm.ko
+    write /sys/class/backlight/panel0-backlight/brightness 200    
     
 on boot
-    setprop sys.usb.cofig adb
+#    setprop sys.usb.cofig adb
+    wait /sys/devices/virtual/oplus_chg/usb/otg_switch    
+    write /sys/devices/virtual/oplus_chg/usb/otg_switch 1     
     start health-hal-2-1
-    start custom-script
+    start custom-script   
     
 on property:twrp.modules.loaded=true
     # Load ADSP firmware for PMIC
     wait /sys/kernel/boot_adsp/boot
     write /sys/kernel/boot_adsp/boot 1
     wait /sys/class/power_supply/battery
-#    umount /firmware   
-    setprop sys.usb.cofig mtp,adb    
+    wait /sys/devices/virtual/oplus_chg/usb/otg_switch    
+    write /sys/devices/virtual/oplus_chg/usb/otg_switch 1
+    umount /firmware       
     
 service custom-script /system/bin/custom-script.sh
     user root
@@ -64,3 +71,4 @@ service custom-script /system/bin/custom-script.sh
     disabled
     oneshot
     seclabel u:r:recovery:s0 
+          
