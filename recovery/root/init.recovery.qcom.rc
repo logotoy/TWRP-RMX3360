@@ -45,6 +45,7 @@ on init
     
 on boot    
     start health-hal-2-1
+    start qti.vibrator
     start custom-script   
     
 on property:twrp.modules.loaded=true
@@ -63,4 +64,10 @@ service custom-script /system/bin/custom-script.sh
     disabled
     oneshot
     seclabel u:r:recovery:s0 
-          
+
+service qti.vibrator /vendor/bin/vendor.qti.hardware.vibrator.service
+    class hal
+    user system
+    group system input
+    seclabel u:r:recovery:s0
+    onrestart restart qti.vibrator        

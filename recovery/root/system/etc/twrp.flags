@@ -1,8 +1,23 @@
 # mount point	fstype	device											device2				flags
 # Logical partitions
-/system_ext	        ext4	system_ext										flags=display=System_EXT
+system       /system                ext4    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
+system       /system                erofs    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount,avb_keys=/avb/q-gsi.avbpubkey:/avb/r-gsi.avbpubkey:/avb/s-gsi.avbpubkey
+system_ext   /system_ext            ext4    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+system_ext   /system_ext            erofs    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+product      /product               ext4    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+product      /product               erofs    ro,barrier=1,discard       wait,slotselect,avb=vbmeta_system,logical,first_stage_mount
+vendor       /vendor                ext4    ro,barrier=1,discard       wait,slotselect,avb,logical,first_stage_mount
+vendor       /vendor                erofs    ro,barrier=1,discard       wait,slotselect,avb,logical,first_stage_mount
+odm          /odm                   ext4    ro,barrier=1,discard       wait,slotselect,avb,logical,first_stage_mount
+odm          /odm                   erofs    ro,barrier=1,discard       wait,slotselect,avb,logical,first_stage_mount
 
-/odm                    ext4	system_ext										flags=display=ODM
+/system_root            ext4    /system                        flags=slotselect;flashimg=1
+/system_root            erofs   /system                        flags=slotselect;flashimg=1
+/system_image           emmc    /dev/block/mapper/system       flags=slotselect;display="System image";flashimg=1;backup=1
+/vendor_image           emmc    /dev/block/mapper/vendor       flags=slotselect;display="Vendor image";flashimg=1;backup=1
+/product_image          emmc    /dev/block/mapper/product      flags=slotselect;display="Product image";flashimg=1;backup=1
+/system_ext_image       emmc    /dev/block/mapper/system_ext   flags=slotselect;display="System ext image";backup=1;flashimg=1
+/my_region_image        emmc    /dev/block/mapper/my_region    flags=slotselect;display="My region image";flashimg=1
 
 
 
